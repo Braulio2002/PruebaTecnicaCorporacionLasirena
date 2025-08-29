@@ -1,0 +1,126 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Pelicula {
+  id            String   @id @default(cuid())
+  titulo        String   @unique
+  sinopsis      String?
+  duracionMin   Int
+  clasificacion String
+  generos       String[]
+  estado        EstadoPelicula @default(ACTIVO)
+  fechaEstreno  DateTime
+  imagen        String?
+  
+  // Auditoría
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+  creadoPor     String?
+  actualizadoPor String?
+  eliminadoEn   DateTime?
+  
+  // Relaciones
+  turnos        Turno[]
+  
+  @@map("peliculas")
+}
+
+model Turno {
+  id         String      @id @default(cuid())
+  peliculaId String
+  sala       String
+  inicio     DateTime
+  fin        DateTime
+  precio     Decimal     @db.Decimal(10, 2)
+  idioma     IdiomaType
+  formato    FormatoType
+  aforo      Int
+  estado     EstadoTurno @default(ACTIVO)
+  
+  // Auditoría
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+  creadoPor     String?
+  actualizadoPor String?
+  eliminadoEn   DateTime?
+  
+  // Relaciones
+  pelicula   Pelicula @relation(fields: [peliculaId], references: [id], onDelete: Cascade)
+  
+  // Índices y constraints
+  @@unique([sala, inicio, fin], name: "unique_sala_horario")
+  @@index([peliculaId])
+  @@index([sala])
+  @@index([inicio, fin])
+  @@map("turnos")
+}
+
+enum EstadoPelicula {
+  ACTIVO
+  INACTIVO
+}
+
+enum EstadoTurno {
+  ACTIVO
+  INACTIVO
+  CANCELADO
+}
+
+enum IdiomaType {
+  DOBLADO
+  SUBTITULADO
+}
+
+enum FormatoType {
+  DOS_D
+  TRES_D
+  IMAX
+}
+
+model Usuario {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  password      String
+  nombre        String
+  role          RoleType @default(USER)
+  activo        Boolean  @default(true)
+  
+  // Auditoría
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+  eliminadoEn   DateTime?
+  
+  // Relaciones
+  refreshTokens RefreshToken[]
+  
+  @@map("usuarios")
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  usuarioId String
+  expiresAt DateTime
+  revocado  Boolean  @default(false)
+  creadoEn  DateTime @default(now())
+  
+  // Relaciones
+  usuario   Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  
+  @@map("refresh_tokens")
+}
+
+enum RoleType {
+  ADMIN
+  USER
+}

@@ -1,0 +1,420 @@
+{
+	"info": {
+		"_postman_id": "cinema-api-collection",
+		"name": "Cinema Management API",
+		"description": "Colección completa para probar la API de gestión de cine con películas y turnos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/health",
+					"host": ["{{base_url}}"],
+					"path": ["health"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Películas",
+			"item": [
+				{
+					"name": "Obtener todas las películas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/peliculas?page=1&limit=10",
+							"host": ["{{base_url}}"],
+							"path": ["api", "peliculas"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear nueva película",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"titulo\": \"Oppenheimer\",\n  \"sinopsis\": \"La historia de J. Robert Oppenheimer y su papel en el desarrollo de la bomba atómica durante la Segunda Guerra Mundial.\",\n  \"duracionMin\": 180,\n  \"clasificacion\": \"R\",\n  \"generos\": [\"Drama\", \"Historia\", \"Thriller\"],\n  \"fechaEstreno\": \"2023-07-21T00:00:00.000Z\",\n  \"imagen\": \"https://image.tmdb.org/t/p/w500/oppenheimer.jpg\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/peliculas",
+							"host": ["{{base_url}}"],
+							"path": ["api", "peliculas"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener película por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/peliculas/{{pelicula_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "peliculas", "{{pelicula_id}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar película",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"titulo\": \"Avatar: El Camino del Agua - Edición Extendida\",\n  \"sinopsis\": \"Versión extendida con escenas adicionales...\",\n  \"duracionMin\": 210,\n  \"clasificacion\": \"PG-13\",\n  \"generos\": [\"Acción\", \"Aventura\", \"Ciencia Ficción\", \"Drama\"]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/peliculas/{{pelicula_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "peliculas", "{{pelicula_id}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar película",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/peliculas/{{pelicula_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "peliculas", "{{pelicula_id}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear turnos masivos para película",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"turnos\": [\n    {\n      \"sala\": \"Sala 6\",\n      \"inicio\": \"2025-01-20T15:00:00.000Z\",\n      \"precio\": 12.50,\n      \"idioma\": \"DOBLADO\",\n      \"formato\": \"IMAX\",\n      \"aforo\": 300\n    },\n    {\n      \"sala\": \"Sala 7\",\n      \"inicio\": \"2025-01-20T18:00:00.000Z\",\n      \"precio\": 15.00,\n      \"idioma\": \"SUBTITULADO\",\n      \"formato\": \"IMAX\",\n      \"aforo\": 300\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/peliculas/{{pelicula_id}}/turnos:bulkCreate",
+							"host": ["{{base_url}}"],
+							"path": ["api", "peliculas", "{{pelicula_id}}", "turnos:bulkCreate"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Turnos",
+			"item": [
+				{
+					"name": "Obtener todos los turnos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/turnos?page=1&limit=10",
+							"host": ["{{base_url}}"],
+							"path": ["api", "turnos"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filtrar turnos por película",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/turnos?peliculaId={{pelicula_id}}&page=1&limit=10",
+							"host": ["{{base_url}}"],
+							"path": ["api", "turnos"],
+							"query": [
+								{
+									"key": "peliculaId",
+									"value": "{{pelicula_id}}"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filtrar turnos por sala y fechas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/turnos?sala=Sala 1&desde=2025-01-18T00:00:00.000Z&hasta=2025-01-20T23:59:59.999Z",
+							"host": ["{{base_url}}"],
+							"path": ["api", "turnos"],
+							"query": [
+								{
+									"key": "sala",
+									"value": "Sala 1"
+								},
+								{
+									"key": "desde",
+									"value": "2025-01-18T00:00:00.000Z"
+								},
+								{
+									"key": "hasta",
+									"value": "2025-01-20T23:59:59.999Z"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear nuevo turno",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"peliculaId\": \"{{pelicula_id}}\",\n  \"sala\": \"Sala 8\",\n  \"inicio\": \"2025-01-21T20:00:00.000Z\",\n  \"precio\": 11.50,\n  \"idioma\": \"DOBLADO\",\n  \"formato\": \"DOS_D\",\n  \"aforo\": 200\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/turnos",
+							"host": ["{{base_url}}"],
+							"path": ["api", "turnos"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear múltiples turnos",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"turnos\": [\n    {\n      \"peliculaId\": \"{{pelicula_id}}\",\n      \"sala\": \"Sala 9\",\n      \"inicio\": \"2025-01-22T14:30:00.000Z\",\n      \"precio\": 9.50,\n      \"idioma\": \"SUBTITULADO\",\n      \"formato\": \"DOS_D\",\n      \"aforo\": 150\n    },\n    {\n      \"peliculaId\": \"{{pelicula_id}}\",\n      \"sala\": \"Sala 10\",\n      \"inicio\": \"2025-01-22T17:00:00.000Z\",\n      \"precio\": 13.00,\n      \"idioma\": \"DOBLADO\",\n      \"formato\": \"TRES_D\",\n      \"aforo\": 180\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/turnos/bulk",
+							"host": ["{{base_url}}"],
+							"path": ["api", "turnos", "bulk"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener turno por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/turnos/{{turno_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "turnos", "{{turno_id}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar turno",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"precio\": 14.00,\n  \"idioma\": \"SUBTITULADO\",\n  \"formato\": \"IMAX\",\n  \"aforo\": 250\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/turnos/{{turno_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "turnos", "{{turno_id}}"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar turno",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/turnos/{{turno_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "turnos", "{{turno_id}}"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Casos de Prueba - Validaciones",
+			"item": [
+				{
+					"name": "Error - Película con título duplicado",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"titulo\": \"Avatar: El Camino del Agua\",\n  \"sinopsis\": \"Película duplicada para probar validación\",\n  \"duracionMin\": 120,\n  \"clasificacion\": \"PG-13\",\n  \"generos\": [\"Acción\"],\n  \"fechaEstreno\": \"2023-01-01T00:00:00.000Z\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/peliculas",
+							"host": ["{{base_url}}"],
+							"path": ["api", "peliculas"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Error - Turno con solapamiento de horario",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"peliculaId\": \"{{pelicula_id}}\",\n  \"sala\": \"Sala 1\",\n  \"inicio\": \"2025-01-18T14:00:00.000Z\",\n  \"precio\": 10.00,\n  \"idioma\": \"DOBLADO\",\n  \"formato\": \"DOS_D\",\n  \"aforo\": 200\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/turnos",
+							"host": ["{{base_url}}"],
+							"path": ["api", "turnos"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Error - Datos inválidos película",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"titulo\": \"\",\n  \"duracionMin\": -10,\n  \"clasificacion\": \"INVALID\",\n  \"generos\": [],\n  \"fechaEstreno\": \"fecha-invalida\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/peliculas",
+							"host": ["{{base_url}}"],
+							"path": ["api", "peliculas"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Error - ID inexistente",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/peliculas/id-inexistente-123",
+							"host": ["{{base_url}}"],
+							"path": ["api", "peliculas", "id-inexistente-123"]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "pelicula_id",
+			"value": "",
+			"type": "string",
+			"description": "ID de película obtenido de las respuestas"
+		},
+		{
+			"key": "turno_id",
+			"value": "",
+			"type": "string",
+			"description": "ID de turno obtenido de las respuestas"
+		}
+	]
+}
